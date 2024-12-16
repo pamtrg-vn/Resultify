@@ -12,7 +12,7 @@ class TestResult(unittest.TestCase):
     def test_error_creation(self):
         error = ValueError("An error occurred")
         result = IRResult.error(error)
-        self.assertTrue(result.is_error())
+        self.assertTrue(result.is_failure())
         self.assertIsNone(result.value)
         self.assertEqual(result.error, error)
 
@@ -26,7 +26,7 @@ class TestResult(unittest.TestCase):
         error = ValueError("An error occurred")
         result = IRResult.error(error)
         mapped_result = result.map(lambda x: x * 2)
-        self.assertTrue(mapped_result.is_error())
+        self.assertTrue(mapped_result.is_failure())
         self.assertEqual(mapped_result.error, error)
 
     def test_map_err_success(self):
@@ -39,7 +39,7 @@ class TestResult(unittest.TestCase):
         error = ValueError("An error occurred")
         result = IRResult.error(error)
         mapped_result = result.map_err(lambda e: str(e))
-        self.assertTrue(mapped_result.is_error())
+        self.assertTrue(mapped_result.is_failure())
         self.assertEqual(mapped_result.error, "An error occurred")
 
     def test_and_then_success(self):
@@ -52,7 +52,7 @@ class TestResult(unittest.TestCase):
         error = ValueError("An error occurred")
         result = IRResult.error(error)
         chained_result = result.and_then(lambda x: IRResult.success(x + 5))
-        self.assertTrue(chained_result.is_error())
+        self.assertTrue(chained_result.is_failure())
         self.assertEqual(chained_result.error, error)
 
     def test_or_else_success(self):
